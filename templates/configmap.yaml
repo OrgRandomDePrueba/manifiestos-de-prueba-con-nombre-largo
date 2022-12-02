@@ -1,0 +1,12 @@
+{{ if .Values.configMap.enable }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Values.appname }}-configmap
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $.Values.appname }}
+    source: cicd
+data:
+{{ (.Files.Glob "configmap-content.yaml").AsConfig | indent 2 }}
+{{end}}

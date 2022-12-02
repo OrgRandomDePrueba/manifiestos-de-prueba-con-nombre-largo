@@ -1,0 +1,49 @@
+{{ if .Values.cronjob.enable }}
+{{- range $job, $val := .Values.cronjob.crons }}
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: cron-{{ $.Values.appname }}-{{ .name }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $.Values.appname }}
+    source: cicd
+spec:
+  schedule: {{ .schedule }}
+  concurrencyPolicy: Allow
+  suspend: false
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+            - name: cron-{{ $.Values.appname }}-{{ .name }}
+              image: >-
+                image-registry.openshift-image-registry.svc:5000/{{ $.Values.namespace }}/{{ $.Values.appname }}:{{ $.Chart.AppVersion }}
+              resources: {}
+              imagePullPolicy: Always
+              env:
+              {{- $secretName  := $.Values.appname -}}
+              {{- range $keysecret, $valorsecret := $.Values.env.secret }}
+              - name: {{ $keysecret }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $secretName }}-secret
+                    key: {{ $keysecret }}
+              {{- end}}
+              {{- range $key, $valor := $.Values.env.normal }}
+              - name: {{ $key }}
+                value: {{ $valor | quote }}
+              {{- end}}
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit }}
+---
+{{- end}}
+{{ end }}

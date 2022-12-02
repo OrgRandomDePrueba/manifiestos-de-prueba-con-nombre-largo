@@ -1,0 +1,18 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: {{ .Values.appname }}
+  labels:
+    app: {{ .Values.appname }}
+    source: cicd
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: {{ .Chart.AppVersion }}
+      from:
+        kind: DockerImage
+        name: 'glaregistry.azurecr.io/{{ .Chart.Name }}:{{ .Chart.AppVersion }}'
+      importPolicy: {}
+      referencePolicy:
+        type: Local

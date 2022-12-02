@@ -1,0 +1,11 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: {{ .Values.appname }}-ocpregistry-private
+  labels:
+    app: {{ .Values.appname }}
+    source: cicd
+data:
+  .dockerconfigjson: >-
+    eyJhdXRocyI6eyJnbGFyZWdpc3RyeS5henVyZWNyLmlvIjp7InVzZXJuYW1lIjoib3BlbnNoaWZ0cHVsbCIsInBhc3N3b3JkIjoiaXl3UWRWNjhscmFCZHFtZmNCSmUwWUcrTEFuUjlUcG8iLCJhdXRoIjoiYjNCbGJuTm9hV1owY0hWc2JEcHBlWGRSWkZZMk9HeHlZVUprY1cxbVkwSktaVEJaUnl0TVFXNVNPVlJ3Ync9PSIsImVtYWlsIjoiIn19fQ==
+type: kubernetes.io/dockerconfigjson

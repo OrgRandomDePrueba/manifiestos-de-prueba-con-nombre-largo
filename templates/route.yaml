@@ -1,0 +1,17 @@
+{{ if .Values.route }}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ .Values.appname }}
+  labels:
+    app: {{ .Values.appname }}
+    source: cicd
+spec:
+  host: {{ .Values.appname }}-{{ .Values.namespace }}.{{ .Values.cluster.fqdn }}
+  to:
+    kind: Service
+    name: {{ .Values.appname }}
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+{{end}}
