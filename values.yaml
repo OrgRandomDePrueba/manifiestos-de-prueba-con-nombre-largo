@@ -14,7 +14,7 @@ env:
     apiToken: akgladkfi14$235kas#dlvxzxs
 replicacontroller:
   revisionHistoryLimit: 1
-  replicas: 3
+  replicas: 4
 service:
   Port: 8080
   targetPort: 8080
