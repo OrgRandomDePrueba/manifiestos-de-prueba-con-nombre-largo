@@ -60,4 +60,4 @@ configMap:
     linea1: |-
       uno 
        dos
-clusterlogging: false
+clusterlogging: true
