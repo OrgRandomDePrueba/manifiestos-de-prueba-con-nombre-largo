@@ -1,108 +1,63 @@
-#############################################################################
-#######################  Parametros para despliegue  ########################
-#############################################################################
-## NOMBRE DE APLICACION: [nombre-de-app]
-#############################################################################
-##
-## Variables y Secrets ######################################################
 env:
-  # Definición de Variabless
   normal:
-    # [key]:"[value]"
-    entorno: "qa"
-    redisHost: "10.20.0.10"
-    redisPort: "6379"
-    mysqlHost: "10.20.0.10"
-    mysqlPort: "3306"
-    apiURL: "{0}/api/Contratos/InformacionContratoPorNumeroDeEnvio/{1}?format=json"
-  # Definición de Secrets
+    entorno: qa
+    redisHost: 10.20.0.10
+    redisPort: '6379'
+    mysqlHost: 10.20.0.10
+    mysqlPort: '3306'
+    apiURL: '{0}/api/Contratos/InformacionContratoPorNumeroDeEnvio/{1}?format=json'
   secret:
-    mysqlUsername: "user1"
-    mysqlPassword: "password1"
-    redisUsername: "user2"
-    redisPassword: "password2"
-    apiToken: "akgladkfi14$235kas#dlvxzxs"
-#############################################################################
-#############################################################################
-##
-## Revisiones y escalamiento horizontal #####################################
+    mysqlUsername: user1
+    mysqlPassword: password1
+    redisUsername: user2
+    redisPassword: password2
+    apiToken: akgladkfi14$235kas#dlvxzxs
 replicacontroller:
-  # Cantidad de revisiones: de 1 a 3
   revisionHistoryLimit: 1
-  # Cantidad de instancias (Pods): de 1 a 10
   replicas: 3
-#############################################################################
-##
-## Red ######################################################################
 service:
-  # Puerto del servicio: [port]
   Port: 8080
-  # Puerto del contenedor: [port]
   targetPort: 8080
-##
-# Formato estandar de ruta: 
-# [nombre-de-app]-[nombre-de-proyecto]-[ambiente].clusterFQDN
-# Exponer en una ruta privada: true o false
 route: true
-#############################################################################
-##
-##  Pruebas de lectura y vida ###############################################
 healthcheck:
-  # Ejecutar prueba de lectura: true o false
   readiness: false
-  # Path: "[path]"
-  readinesspath: "/index.html"
-  # Port: "[Port]"
-  readinessport: "8080"
-  # Type: HTTP
+  readinesspath: /index.html
+  readinessport: '8080'
   readinessscheme: HTTP
-  # Ejecutar prueba de vida: true o false
   liveness: false
-  # Path: "[path]"
-  livenesspath: "/index.html"
-  # Port: "[Port]"
-  livenessport: "8080"
-  # Type: HTTP
+  livenesspath: /index.html
+  livenessport: '8080'
   livenessscheme: HTTP
-#############################################################################
-##
-##  Cronjobs ################################################################
 cronjob:
   enable: false
   crons:
-    "0":
-     name: diario
-     schedule: "10 10 * * *"
-     successfulJobsHistoryLimit: 3
-     failedJobsHistoryLimit: 1
-    "1":
-     name: semanal
-     schedule: "10 10 * * 5"
-     successfulJobsHistoryLimit: 3
-     failedJobsHistoryLimit: 1
-    "2":
-     name: mensual
-     schedule: "10 10 5 * *"
-     successfulJobsHistoryLimit: 3
-     failedJobsHistoryLimit: 1
-    "3":
-     name: anual
-     schedule: "10 10 * 12 5"
-     successfulJobsHistoryLimit: 3
-     failedJobsHistoryLimit: 1
-#############################################################################
-##
-##  Configmap ###############################################################
+    '0':
+      name: diario
+      schedule: 10 10 * * *
+      successfulJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 1
+    '1':
+      name: semanal
+      schedule: 10 10 * * 5
+      successfulJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 1
+    '2':
+      name: mensual
+      schedule: 10 10 5 * *
+      successfulJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 1
+    '3':
+      name: anual
+      schedule: 10 10 * 12 5
+      successfulJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 1
 configMap:
   enable: false
   path: /home/redis-master
   file: redis.conf
   key: redis-config
   map:
-    linea1: "uno \n dos"
-#############################################################################
-##
-##  Redireccion de Logs #####################################################
-clusterlogging: false
-#############################################################################
-#############################################################################
+    linea1: |-
+      uno 
+       dos
+clusterlogging: true
