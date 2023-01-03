@@ -1,7 +1,8 @@
 env:
   normal:
-    entorno: modificadodas
+    entorno: otra modificacion
     redisHost: 10.20.0.10
+    otra-variable: 123
     redisPort: '6379'
     mysqlHost: 10.20.0.10
     mysqlPort: '3306'
